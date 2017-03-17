@@ -9,7 +9,7 @@ public class ServerActivater {
 	
 	private static Logger logger = LoggerFactory.getLogger(ServerActivater.class);
 	
-	public Object procceed(IsoMessage message) throws Exception {
+	public IsoMessage procceed(IsoMessage message) throws Exception {
 		logger.debug("server activator received message : {}", message.debugString());
 
 		return message;

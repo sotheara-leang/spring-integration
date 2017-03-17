@@ -17,10 +17,9 @@
 		deserializer="codec" />
 
 	<int-ip:tcp-inbound-gateway
-		id="inbountGatway"
+		id="inboundGatway"
 		connection-factory="connFactory" 
 		request-channel="inputChannel"
-		reply-channel="outputChannel"
 		error-channel="errorChannel" />
 		
 	<int:channel id="inputChannel" />
@@ -31,17 +30,15 @@
 		
 	<int:channel id="inboundChannel" />
 	
-	<int:service-activator ref="serverActivator" input-channel="inboundChannel" output-channel="outboudChannel" />
+	<int:service-activator ref="serverActivator" input-channel="inboundChannel" output-channel="outboudChannel"  />
 	
 	<int:channel id="outboudChannel" />
 	
-	<int:chain input-channel="outboudChannel" output-channel="outputChannel">
+	<int:chain input-channel="outboudChannel" >
 		<int:transformer expression="payload.writeData()" />
 	</int:chain>
 
-	<int:channel id="outputChannel" />
-  
-  
+
   	<!-- Error -->
   	
    	<int:transformer 
