@@ -7,7 +7,7 @@
 
 	<context:annotation-config />
 
-	<context:component-scan base-package="com.example.springintegration.server" />
+	<context:component-scan base-package="com.example.springintegration.client" />
 	
 	<import resource="context-iso8583.xml"/>
 	<import resource="context-integration.xml"/>

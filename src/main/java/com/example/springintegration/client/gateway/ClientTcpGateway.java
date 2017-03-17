@@ -1,4 +1,4 @@
-package com.example.springintegration.gateway;
+package com.example.springintegration.client.gateway;
 
 import org.springframework.util.concurrent.ListenableFuture;
 

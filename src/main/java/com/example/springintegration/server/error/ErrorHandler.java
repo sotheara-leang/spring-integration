@@ -1,4 +1,4 @@
-package com.example.springintegration.error;
+package com.example.springintegration.server.error;
 
 import org.springframework.messaging.MessagingException;
 

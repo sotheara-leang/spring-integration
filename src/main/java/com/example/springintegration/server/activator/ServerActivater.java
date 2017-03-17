@@ -1,4 +1,4 @@
-package com.example.springintegration.activator;
+package com.example.springintegration.server.activator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

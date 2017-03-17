@@ -1,4 +1,4 @@
-package com.example.springintegration;
+package com.example.springintegration.server;
 
 import org.springframework.context.support.GenericXmlApplicationContext;
 

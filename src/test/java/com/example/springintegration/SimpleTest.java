@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutionException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.springintegration.gateway.ClientTcpGateway;
+import com.example.springintegration.client.gateway.ClientTcpGateway;
 
 public class SimpleTest extends AbstractTestCase {
 
