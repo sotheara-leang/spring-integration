@@ -2,7 +2,7 @@ package com.example.springintegration.server;
 
 import org.springframework.context.support.GenericXmlApplicationContext;
 
-public class AppBootstrap {
+public class ServerBootstrap {
 
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
