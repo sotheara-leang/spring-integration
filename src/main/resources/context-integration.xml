@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip-4.2.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd">
+
+	<bean id="javaSerializer" class="org.springframework.core.serializer.DefaultSerializer" />
+	
+	<bean id="javaDeserializer" class="org.springframework.core.serializer.DefaultDeserializer" />
+	
+	<bean id="errorHandler" class="com.example.springintegration.error.ErrorHandler" />
+	
+	<!-- Server -->
+	
+	<int-ip:tcp-connection-factory 
+		id="serverConnFactory"
+		type="server" 
+		using-nio="true" 
+		port="5000"
+		
+		 />
+
+	<int-ip:tcp-inbound-gateway
+		id="serverInbountGatway"
+		connection-factory="serverConnFactory" 
+		request-channel="serverInboudChannel"
+		error-channel="errorChannel" />
+
+	<int:channel id="serverInboudChannel" />
+	
+	<bean id="serverActivator" class="com.example.springintegration.activator.ServerActivater" />
+	
+	<int:service-activator ref="serverActivator" input-channel="serverInboudChannel" />
+	
+	<!-- Client -->
+	
+	<int:gateway 
+		service-interface="com.example.springintegration.gateway.ClientTcpGateway" 
+		default-request-channel="clientOutboudChannel"
+		error-channel="errorChannel">
+	</int:gateway>
+	
+	<int-ip:tcp-connection-factory 
+		id="clientConnFactory"
+	    type="client"
+	    host="localhost"
+	    port="5000"
+	    using-nio="true"
+	    serializer="javaSerializer"
+		deserializer="javaDeserializer" />
+   	
+   	<int:channel id="clientOutboudChannel" />
+   	
+   	<int-ip:tcp-outbound-gateway 
+   		id="clientOutboundGateway"
+   		connection-factory="clientConnFactory"
+   		request-channel="clientOutboudChannel" />
+   	
+   	<!-- Other  -->
+   	
+   	<int:transformer 
+		input-channel="errorChannel"
+        ref="errorHandler" 
+        method="handleError" />
+</beans>
