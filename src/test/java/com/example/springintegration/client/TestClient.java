@@ -1,4 +1,4 @@
-package com.example.springintegration;
+package com.example.springintegration.client;
 
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.ExecutionException;
@@ -6,9 +6,10 @@ import java.util.concurrent.ExecutionException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.springintegration.AbstractTestCase;
 import com.example.springintegration.client.gateway.ClientTcpGateway;
 
-public class SimpleTest extends AbstractTestCase {
+public class TestClient extends AbstractTestCase {
 
 	@Autowired
 	ClientTcpGateway clientGatway;
