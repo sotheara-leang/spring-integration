@@ -15,12 +15,8 @@ public class SimpleTest extends AbstractTestCase {
 	
 	@Test
 	public void doTest() throws InterruptedException, ExecutionException, UnsupportedEncodingException {
-//		Object response = clientGatway.send("Hello").get();
+		Object response = clientGatway.send("Hello").get();
 		
-//		System.out.println(response);
-		
-		byte[] theBytes = "\\n".getBytes("UTF-8");
-		
-		System.out.println(theBytes);
+		System.out.println(response);
 	}
 }

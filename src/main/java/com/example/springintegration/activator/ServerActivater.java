@@ -7,9 +7,9 @@ public class ServerActivater {
 	
 	private static Logger logger = LoggerFactory.getLogger(ServerActivater.class);
 	
-	public Object procceed(byte[] message) throws Exception {
-		logger.debug("server activator received message : {}", new String(message));
-		
-		return "Echo : " + new String(message);
+	public Object procceed(Object message) throws Exception {
+		logger.debug("server activator received message : {}", message);
+
+		return message;
 	}
 }

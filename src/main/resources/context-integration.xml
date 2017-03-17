@@ -19,8 +19,8 @@
 		type="server" 
 		using-nio="true" 
 		port="5000"
-		
-		 />
+		serializer="javaSerializer"
+		deserializer="javaDeserializer" />
 
 	<int-ip:tcp-inbound-gateway
 		id="serverInbountGatway"
