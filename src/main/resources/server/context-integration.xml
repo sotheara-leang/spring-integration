@@ -18,7 +18,7 @@
 
 	<int-ip:tcp-inbound-gateway
 		id="inbountGatway"
-		connection-factory="serverConnFactory" 
+		connection-factory="connFactory" 
 		request-channel="inputChannel"
 		reply-channel="outputChannel"
 		error-channel="errorChannel" />
@@ -26,12 +26,12 @@
 	<int:channel id="inputChannel" />
 		
 	<int:chain input-channel="inputChannel" output-channel="inboundChannel">
-		<int:transformer ref="isoMessageFactory" method="parseMessage(payload, 0)" />
+		<int:transformer expression="@isoMessageFactory.parseMessage(payload, 0)" />
 	</int:chain>
 		
-	<int:channel id="inboudChannel" />
+	<int:channel id="inboundChannel" />
 	
-	<int:service-activator ref="serverActivator" input-channel="inboudChannel" output-channel="outboudChannel" />
+	<int:service-activator ref="serverActivator" input-channel="inboundChannel" output-channel="outboudChannel" />
 	
 	<int:channel id="outboudChannel" />
 	
@@ -47,7 +47,7 @@
    	<int:transformer 
 		input-channel="errorChannel"
         method="handleError">
-    	<bean class="com.example.springintegration.error.ErrorHandler" />    
+    	<bean class="com.example.springintegration.server.error.ErrorHandler" />    
     </int:transformer>
   
   
