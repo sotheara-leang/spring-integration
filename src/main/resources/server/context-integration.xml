@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip-4.2.xsd
-		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.2.xsd">
+		http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip-4.3.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.3.xsd">
 
 	<!-- Tcp Server -->
 	
+	<bean id="sslContextSupport"
+	    class="org.springframework.integration.ip.tcp.connection.DefaultTcpSSLContextSupport">
+	    <constructor-arg value="${keystore.path}"/>
+	    <constructor-arg value="${truststore.path}"/>
+	    <constructor-arg value="${keystore.password}"/>
+	    <constructor-arg value="${truststore.password}"/>
+	</bean>
+
 	<int-ip:tcp-connection-factory 
 		id="connFactory"
 		type="server" 
@@ -15,7 +24,9 @@
 		host="${server.host}" 
 		port="${server.port}"
 		serializer="codec"
-		deserializer="codec" />
+		deserializer="codec"
+		ssl-context-support="sslContextSupport"
+		nio-connection-support="nioSSLConnSupport" />
 
 	<int-ip:tcp-inbound-gateway
 		id="inboundGatway"
@@ -54,5 +65,7 @@
   	<bean id="codec" class="org.springframework.integration.ip.tcp.serializer.ByteArrayLengthHeaderSerializer" />
   	
   	<bean id="serverActivator" class="com.example.springintegration.server.activator.ServerActivater" />
+  	
+  	<bean id="nioSSLConnSupport" class="com.example.springintegration.server.util.TcpNioSSLConnectionSupport" />
   	
 </beans>

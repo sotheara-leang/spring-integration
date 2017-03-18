@@ -1,3 +1,11 @@
 server:
   host: localhost
   port: 5000
+  
+keystore:
+  path: classpath:server/certificate/server-keystore.jks
+  password: changeit
+ 
+truststore:
+  path: classpath:server/certificate/server-truststore.jks
+  password: changeit
