@@ -3,7 +3,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip-4.3.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.3.xsd">
 
@@ -26,7 +28,8 @@
 		serializer="codec"
 		deserializer="codec"
 		ssl-context-support="sslContextSupport"
-		nio-connection-support="nioSSLConnSupport" />
+		nio-connection-support="nioSSLConnSupport"
+		task-executor="taskExecutor" />
 
 	<int-ip:tcp-inbound-gateway
 		id="inboundGatway"
@@ -68,4 +71,22 @@
   	
   	<bean id="nioSSLConnSupport" class="com.example.springintegration.server.util.TcpNioSSLConnectionSupport" />
   	
+  	<bean id="taskExecutor" class="org.springframework.integration.util.CompositeExecutor">
+	    <constructor-arg ref="io"/>
+	    <constructor-arg ref="assembler"/>
+	</bean>
+
+	<task:executor 
+		id="io" 
+		pool-size="4-5" 
+		queue-capacity="5" 
+		rejection-policy="ABORT" 
+		keep-alive="30000" />
+	
+	<task:executor 
+		id="assembler" 
+		pool-size="4-10" 
+		queue-capacity="5" 
+		rejection-policy="ABORT" 
+		keep-alive="30000" />
 </beans>
