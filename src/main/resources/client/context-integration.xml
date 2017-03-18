@@ -46,7 +46,13 @@
    		id="outboundGateway"
    		connection-factory="connFactory"
    		request-channel="outputChannel"
-   		reply-channel="inputChannel" />
+   		reply-channel="inputChannel" >
+   		
+   		<int-ip:request-handler-advice-chain>
+   			<ref bean="retryAdvice"/>
+   		</int-ip:request-handler-advice-chain>
+   		
+   	</int-ip:tcp-outbound-gateway>
    		
    	<int:channel id="inputChannel" />
 	
@@ -68,4 +74,21 @@
   	
   	<bean id="codec" class="org.springframework.integration.ip.tcp.serializer.ByteArrayLengthHeaderSerializer" />
   	
+  	<bean id="retryAdvice" class="org.springframework.integration.handler.advice.RequestHandlerRetryAdvice">
+		<property name="retryTemplate" ref="retryTemplate" />
+	</bean>
+   			
+  	<bean id="retryTemplate" class="org.springframework.retry.support.RetryTemplate">
+		<property name="retryPolicy">
+			<bean class="org.springframework.retry.policy.SimpleRetryPolicy">
+				<property name="maxAttempts" value="4" />
+			</bean>
+		</property>
+		<property name="backOffPolicy">
+			<bean class="org.springframework.retry.backoff.ExponentialBackOffPolicy">
+				<property name="initialInterval" value="1000" />
+				<property name="multiplier" value="5" />
+			</bean>
+		</property>
+	</bean>
 </beans>
