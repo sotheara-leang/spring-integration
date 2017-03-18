@@ -11,8 +11,9 @@
 	<int-ip:tcp-connection-factory 
 		id="connFactory"
 		type="server" 
-		using-nio="true" 
-		port="5000"
+		using-nio="true"
+		host="${server.host}" 
+		port="${server.port}"
 		serializer="codec"
 		deserializer="codec" />
 

@@ -18,8 +18,8 @@
 	<int-ip:tcp-connection-factory 
 		id="connFactory"
 	    type="client"
-	    host="localhost"
-	    port="5000"
+	    host="${server.host}"
+	    port="${server.port}"
 	    using-nio="true"
 	    serializer="codec"
 		deserializer="codec" />

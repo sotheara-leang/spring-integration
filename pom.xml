@@ -76,12 +76,18 @@
 			<artifactId>spring-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.sf.j8583</groupId>
 			<artifactId>j8583</artifactId>
 			<version>1.12.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>
