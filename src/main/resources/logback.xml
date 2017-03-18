@@ -9,7 +9,9 @@
 	</appender>
 
 	<logger name="com.example.springintegration" level="debug" />
-
+	
+	<logger name="org.springframework.integration" level="debug" />
+	
 	<logger name="org.springframework.core" level="info" />
 
 	<logger name="org.springframework.beans" level="info" />
