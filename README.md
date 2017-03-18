@@ -29,3 +29,7 @@
 - Generate truststore
 
     keytool -import -alias server-key -file server-certificate.cer -keystore client-truststore.jks
+
+#### 3. VM Parameter
+
+- Debug SSL Handshake: -Djavax.net.debug=ssl:handshake
