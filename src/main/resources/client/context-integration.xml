@@ -3,7 +3,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip-4.3.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.3.xsd">
 		
@@ -13,7 +15,8 @@
 		service-interface="com.example.springintegration.client.gateway.ClientTcpGateway" 
 		default-request-channel="outboudChannel"
 		default-reply-channel="inboundChannel"
-		error-channel="errorChannel">
+		error-channel="errorChannel"
+		async-executor="gatewayExecutor" >
 	</int:gateway>
 	
 	<bean id="sslContextSupport"
@@ -91,4 +94,11 @@
 			</bean>
 		</property>
 	</bean>
+	
+	<task:executor 
+		id="gatewayExecutor" 
+		pool-size="3-5" 
+		queue-capacity="10" 
+		keep-alive="30000" />
+		
 </beans>

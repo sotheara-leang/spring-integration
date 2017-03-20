@@ -29,7 +29,7 @@
 		deserializer="codec"
 		ssl-context-support="sslContextSupport"
 		nio-connection-support="nioSSLConnSupport"
-		task-executor="taskExecutor" />
+		task-executor="tcpExecutor" />
 
 	<int-ip:tcp-inbound-gateway
 		id="inboundGatway"
@@ -71,22 +71,22 @@
   	
   	<bean id="nioSSLConnSupport" class="com.example.springintegration.server.util.TcpNioSSLConnectionSupport" />
   	
-  	<bean id="taskExecutor" class="org.springframework.integration.util.CompositeExecutor">
-	    <constructor-arg ref="io"/>
-	    <constructor-arg ref="assembler"/>
+  	<bean id="tcpExecutor" class="org.springframework.integration.util.CompositeExecutor">
+	    <constructor-arg ref="tcpIOExecutor"/>
+	    <constructor-arg ref="tcpAssemblerExecutor"/>
 	</bean>
 
 	<task:executor 
-		id="io" 
-		pool-size="4-5" 
-		queue-capacity="5" 
+		id="tcpIOExecutor" 
+		pool-size="3-5" 
+		queue-capacity="10" 
 		rejection-policy="ABORT" 
 		keep-alive="30000" />
 	
 	<task:executor 
-		id="assembler" 
-		pool-size="4-10" 
-		queue-capacity="5" 
+		id="tcpAssemblerExecutor" 
+		pool-size="5-10" 
+		queue-capacity="100" 
 		rejection-policy="ABORT" 
 		keep-alive="30000" />
 </beans>
