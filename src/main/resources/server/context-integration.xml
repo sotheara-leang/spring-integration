@@ -76,17 +76,25 @@
 	    <constructor-arg ref="tcpAssemblerExecutor"/>
 	</bean>
 
-	<task:executor 
-		id="tcpIOExecutor" 
-		pool-size="3-5" 
-		queue-capacity="10" 
-		rejection-policy="ABORT" 
-		keep-alive="30000" />
+	<bean id="tcpIOExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolExecutorFactoryBean">
+		<property name="corePoolSize" value="5" />
+		<property name="maxPoolSize" value="10" />
+		<property name="keepAliveSeconds" value="60" />
+		<property name="allowCoreThreadTimeOut" value="true" />
+		<property name="queueCapacity" value="10" />
+		<property name="threadNamePrefix" value="io-" />
+		<property name="rejectedExecutionHandler" ref="abortPolicy"/>
+	</bean>
 	
-	<task:executor 
-		id="tcpAssemblerExecutor" 
-		pool-size="5-10" 
-		queue-capacity="100" 
-		rejection-policy="ABORT" 
-		keep-alive="30000" />
+	<bean id="tcpAssemblerExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolExecutorFactoryBean">
+		<property name="corePoolSize" value="5" />
+		<property name="maxPoolSize" value="15" />
+		<property name="keepAliveSeconds" value="60" />
+		<property name="allowCoreThreadTimeOut" value="true" />
+		<property name="queueCapacity" value="100" />
+		<property name="threadNamePrefix" value="assembler-" />
+		<property name="rejectedExecutionHandler" ref="abortPolicy"/>
+	</bean>
+	
+	<bean id="abortPolicy" class="java.util.concurrent.ThreadPoolExecutor.AbortPolicy" />
 </beans>

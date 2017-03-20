@@ -95,10 +95,15 @@
 		</property>
 	</bean>
 	
-	<task:executor 
-		id="gatewayExecutor" 
-		pool-size="3-5" 
-		queue-capacity="10" 
-		keep-alive="30000" />
-		
+	<bean id="gatewayExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolExecutorFactoryBean">
+		<property name="corePoolSize" value="3" />
+		<property name="maxPoolSize" value="5" />
+		<property name="keepAliveSeconds" value="60" />
+		<property name="allowCoreThreadTimeOut" value="true" />
+		<property name="queueCapacity" value="10" />
+		<property name="threadNamePrefix" value="gateway-" />
+		<property name="rejectedExecutionHandler" ref="abortPolicy"/>
+	</bean>
+	
+	<bean id="abortPolicy" class="java.util.concurrent.ThreadPoolExecutor.AbortPolicy" />
 </beans>
