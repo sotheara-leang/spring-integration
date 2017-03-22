@@ -33,3 +33,7 @@
 #### 3. VM Parameter
 
 - Debug SSL Handshake: -Djavax.net.debug=ssl:handshake
+
+#### 4. References
+
+- [Spring Integration Sample](https://github.com/spring-projects/spring-integration-samples)
