@@ -17,7 +17,7 @@
 
  - View key
  
-    keytool -list -v -alias server-ke -keystore server-keystore.ts
+    keytool -list -v -alias server-key -keystore server-keystore.ts
     
 #### 2. Client
 
