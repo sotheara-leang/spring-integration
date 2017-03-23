@@ -11,6 +11,7 @@
 
 	<int:annotation-config />
 	
+	<int:message-history />
 	
 	<!-- Tcp Connection Factory -->
 	
@@ -80,24 +81,27 @@
 	
 	<int:channel id="inboundChannel" />
 		
-	<int:chain input-channel="inboundChannel" output-channel="routeChannel">
+	<int:chain id="decodeChain" input-channel="inboundChannel" output-channel="routingChannel">
 		<int:transformer expression="@isoMessageFactory.parseMessage(payload, 0)" />
 	</int:chain>
 		
-	<int:channel id="routeChannel" />
+	<int:channel id="routingChannel" />
 	
-	<int:router input-channel="routeChannel" expression="'channel.' + T(java.lang.Integer).toHexString(payload.getType())" />
+	<int:router id="channelRouter" input-channel="routingChannel" expression="'channel.' + T(java.lang.Integer).toHexString(payload.getType())" />
 	
 	
 	<!-- Outbound -->
 	
 	<int:channel id="outboundChannel" />
 	
-	<int:chain input-channel="outboundChannel">
+	<int:chain id="encodeChain" input-channel="outboundChannel">
+		<int:service-activator>
+			<bean class="com.example.springintegration.server.activator.LogActivator" />
+		</int:service-activator>
 		<int:transformer expression="payload.writeData()" />
 	</int:chain>
 	
-
+	
   	<!-- Error -->
   	
    	<int:transformer input-channel="errorChannel" method="handleError">
