@@ -15,6 +15,7 @@
 
 	<context:component-scan base-package="com.example.springintegration.server" />
 	
+	<import resource="context-datasource.xml"/>
 	<import resource="context-iso8583.xml"/>
 	<import resource="context-integration.xml"/>
 	

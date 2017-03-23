@@ -14,14 +14,14 @@ public class ServerActivator {
 	
 	@ServiceActivator(inputChannel = "channel.200", outputChannel = "outboundChannel")
 	public IsoMessage procceedMsg200(IsoMessage message) throws Exception {
-		logger.debug("server activator received message : {}", message.debugString());
+		logger.debug("server activator received message 200 : {}", message.debugString());
 
 		return message;
 	}
 	
 	@ServiceActivator(inputChannel = "channel.300", outputChannel = "outboundChannel")
 	public IsoMessage procceedMsg300(IsoMessage message) throws Exception {
-		logger.debug("server activator received message : {}", message.debugString());
+		logger.debug("server activator received message 300 : {}", message.debugString());
 
 		return message;
 	}
