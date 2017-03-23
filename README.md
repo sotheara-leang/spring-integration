@@ -15,7 +15,10 @@
 
     keytool -import -alias client-key -file client-certificate.cer -keystore server-truststore.jks
 
-
+ - View key
+ 
+    keytool -list -v -alias server-ke -keystore server-keystore.ts
+    
 #### 2. Client
 
 - Generate keystore
