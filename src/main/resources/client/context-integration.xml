@@ -35,6 +35,7 @@
 	    using-nio="true"
 	    serializer="codec"
 		deserializer="codec"
+		single-use="true"
 		ssl-context-support="sslContextSupport" />
    	
    	<int:channel id="outboudChannel" />
@@ -47,7 +48,7 @@
 	
    	<int-ip:tcp-outbound-gateway 
    		id="outboundGateway"
-   		connection-factory="connFactory"
+   		connection-factory="cachingConnFactory"
    		request-channel="outputChannel"
    		reply-channel="inputChannel" >
    		
@@ -74,6 +75,11 @@
     </int:transformer>
   
   	<!-- Bean -->
+  	
+  	<bean id="cachingConnFactory" class="org.springframework.integration.ip.tcp.connection.CachingClientConnectionFactory">
+  		<constructor-arg index="0" ref="connFactory" />
+  		<constructor-arg index="1" value="5" />
+  	</bean>
   	
   	<bean id="codec" class="org.springframework.integration.ip.tcp.serializer.ByteArrayLengthHeaderSerializer" />
   	
