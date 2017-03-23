@@ -8,17 +8,12 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/integration/ip http://www.springframework.org/schema/integration/ip/spring-integration-ip-4.3.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.3.xsd">
-		
-	<!-- Tcp Client -->
-
-	<int:gateway 
-		service-interface="com.example.springintegration.client.gateway.ClientTcpGateway" 
-		default-request-channel="outboudChannel"
-		default-reply-channel="inboundChannel"
-		error-channel="errorChannel"
-		async-executor="gatewayExecutor" >
-	</int:gateway>
 	
+	<int:annotation-config />
+		
+		
+	<!-- Tcp Connection Factory -->
+
 	<bean id="sslContextSupport"
 	    class="org.springframework.integration.ip.tcp.connection.DefaultTcpSSLContextSupport">
 	    <constructor-arg value="${keystore.path}"/>
@@ -37,53 +32,30 @@
 		deserializer="codec"
 		single-use="true"
 		ssl-context-support="sslContextSupport" />
-   	
-   	<int:channel id="outboudChannel" />
-   	
-   	<int:chain input-channel="outboudChannel" output-channel="outputChannel">
-		<int:transformer expression="payload.writeData()" />
-	</int:chain>
 	
-	<int:channel id="outputChannel" />
-	
-   	<int-ip:tcp-outbound-gateway 
-   		id="outboundGateway"
-   		connection-factory="cachingConnFactory"
-   		request-channel="outputChannel"
-   		reply-channel="inputChannel" >
-   		
-   		<int-ip:request-handler-advice-chain>
-   			<ref bean="retryAdvice"/>
-   		</int-ip:request-handler-advice-chain>
-   		
-   	</int-ip:tcp-outbound-gateway>
-   		
-   	<int:channel id="inputChannel" />
-	
-	<int:chain input-channel="inputChannel" output-channel="inboundChannel">
-		<int:transformer expression="@isoMessageFactory.parseMessage(payload, 0)" />
-	</int:chain>
-	
-	<int:channel id="inboundChannel" />
-	
-  	<!-- Error -->
-  	
-   	<int:transformer 
-		input-channel="errorChannel"
-        method="handleError">
-    	<bean class="com.example.springintegration.client.error.ErrorHandler" />    
-    </int:transformer>
-  
-  	<!-- Bean -->
-  	
-  	<bean id="cachingConnFactory" class="org.springframework.integration.ip.tcp.connection.CachingClientConnectionFactory">
+	<bean id="cachingConnFactory" class="org.springframework.integration.ip.tcp.connection.CachingClientConnectionFactory">
   		<constructor-arg index="0" ref="connFactory" />
   		<constructor-arg index="1" value="5" />
   	</bean>
   	
   	<bean id="codec" class="org.springframework.integration.ip.tcp.serializer.ByteArrayLengthHeaderSerializer" />
   	
-  	<bean id="retryAdvice" class="org.springframework.integration.handler.advice.RequestHandlerRetryAdvice">
+	
+	<!-- Tcp Outbound Gateway -->
+	
+   	<int-ip:tcp-outbound-gateway 
+   		id="outboundGateway"
+   		connection-factory="cachingConnFactory"
+   		request-channel="outboundGatewayChannel"
+   		reply-channel="inboundGatewayChannel">
+   		
+   		<int-ip:request-handler-advice-chain>
+   			<ref bean="retryAdvice"/>
+   		</int-ip:request-handler-advice-chain>
+   		
+   	</int-ip:tcp-outbound-gateway>
+   	
+	<bean id="retryAdvice" class="org.springframework.integration.handler.advice.RequestHandlerRetryAdvice">
 		<property name="retryTemplate" ref="retryTemplate" />
 	</bean>
    			
@@ -101,6 +73,41 @@
 		</property>
 	</bean>
 	
+	<bean id="abortPolicy" class="java.util.concurrent.ThreadPoolExecutor.AbortPolicy" />
+	
+		
+	<!-- Outbound -->
+	
+   	<int:channel id="outboundChannel" />
+   	
+   	<int:chain input-channel="outboundChannel" output-channel="outboundGatewayChannel">
+		<int:transformer expression="payload.writeData()" />
+	</int:chain>
+	
+	<int:channel id="outboundGatewayChannel" />
+	
+	
+	<!-- inbound -->
+	
+   	<int:channel id="inboundGatewayChannel" />
+	
+	<int:chain input-channel="inboundGatewayChannel" output-channel="inboundChannel">
+		<int:transformer expression="@isoMessageFactory.parseMessage(payload, 0)" />
+	</int:chain>
+	
+	<int:channel id="inboundChannel" />
+	
+	
+	<!-- Tcp Gateway -->
+	
+	<int:gateway 
+		service-interface="com.example.springintegration.client.gateway.ClientTcpGateway" 
+		default-request-channel="outboundChannel"
+		default-reply-channel="inboundChannel"
+		error-channel="errorChannel"
+		async-executor="gatewayExecutor" >
+	</int:gateway>
+	
 	<bean id="gatewayExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolExecutorFactoryBean">
 		<property name="corePoolSize" value="5" />
 		<property name="maxPoolSize" value="10" />
@@ -111,5 +118,13 @@
 		<property name="rejectedExecutionHandler" ref="abortPolicy"/>
 	</bean>
 	
-	<bean id="abortPolicy" class="java.util.concurrent.ThreadPoolExecutor.AbortPolicy" />
+	
+  	<!-- Error -->
+  	
+   	<int:transformer 
+		input-channel="errorChannel"
+        method="handleError">
+    	<bean class="com.example.springintegration.client.error.ErrorHandler" />    
+    </int:transformer>
+    
 </beans>
