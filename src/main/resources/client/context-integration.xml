@@ -10,7 +10,9 @@
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.3.xsd">
 	
 	<int:annotation-config />
-		
+	
+	<int:message-history />
+	
 		
 	<!-- Tcp Connection Factory -->
 
@@ -80,23 +82,26 @@
 	
    	<int:channel id="outboundChannel" />
    	
-   	<int:chain input-channel="outboundChannel" output-channel="outboundGatewayChannel">
+   	<int:chain id="encodeChain" input-channel="outboundChannel" output-channel="outboundGatewayChannel">
 		<int:transformer expression="payload.writeData()" />
 	</int:chain>
 	
 	<int:channel id="outboundGatewayChannel" />
+		
 	
-	
-	<!-- inbound -->
+	<!-- Inbound -->
 	
    	<int:channel id="inboundGatewayChannel" />
 	
-	<int:chain input-channel="inboundGatewayChannel" output-channel="inboundChannel">
+	<int:chain id="decodeChain" input-channel="inboundGatewayChannel" output-channel="inboundChannel">
 		<int:transformer expression="@isoMessageFactory.parseMessage(payload, 0)" />
 	</int:chain>
 	
-	<int:channel id="inboundChannel" />
-	
+	<int:channel id="inboundChannel" >
+		<int:interceptors>
+  			<int:wire-tap channel="logChannel" />
+  		</int:interceptors>
+	</int:channel>
 	
 	<!-- Tcp Gateway -->
 	
@@ -119,12 +124,25 @@
 	</bean>
 	
 	
+	<!-- Log -->
+	
+	<int:channel id="logChannel" />
+	
+	<int:service-activator id="logActivator" input-channel="logChannel">
+		<bean class="com.example.springintegration.client.activator.LogActivator" />
+	</int:service-activator>
+	
+	
   	<!-- Error -->
   	
-   	<int:transformer 
-		input-channel="errorChannel"
-        method="handleError">
+  	<int:channel id="errorChannel">
+  		<int:interceptors>
+  			<int:wire-tap channel="logChannel" />
+  		</int:interceptors>
+  	</int:channel>
+  	
+   	<int:service-activator input-channel="errorChannel">
     	<bean class="com.example.springintegration.client.error.ErrorHandler" />    
-    </int:transformer>
+    </int:service-activator>
     
 </beans>

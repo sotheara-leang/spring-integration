@@ -13,16 +13,16 @@ public class ServerActivator {
 	private static Logger logger = LoggerFactory.getLogger(ServerActivator.class);
 	
 	@ServiceActivator(inputChannel = "channel.200", outputChannel = "outboundChannel")
-	public IsoMessage procceedMsg200(IsoMessage message) throws Exception {
-		logger.debug("server activator received message 200 : {}", message.debugString());
+	public IsoMessage procceedMsg200(IsoMessage isoMessage) {
+		logger.debug("server activator received message 200 : {}", isoMessage.debugString());
 
-		return message;
+		return isoMessage;
 	}
 	
 	@ServiceActivator(inputChannel = "channel.300", outputChannel = "outboundChannel")
-	public IsoMessage procceedMsg300(IsoMessage message) throws Exception {
-		logger.debug("server activator received message 300 : {}", message.debugString());
+	public IsoMessage procceedMsg300(IsoMessage isoMessage) throws Exception {
+		logger.debug("server activator received message 300 : {}", isoMessage.debugString());
 
-		return message;
+		throw new Exception("Create simple exception");
 	}
 }

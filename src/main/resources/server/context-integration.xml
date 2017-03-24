@@ -13,6 +13,7 @@
 	
 	<int:message-history />
 	
+	
 	<!-- Tcp Connection Factory -->
 	
 	<bean id="sslContextSupport"
@@ -95,7 +96,11 @@
 		<int:transformer expression="payload.writeData()" />
 	</int:chain>
 		
-	<int:channel id="outboundAdapterChannel" />
+	<int:channel id="outboundAdapterChannel" >
+		<int:interceptors>
+  			<int:wire-tap channel="logChannel" />
+  		</int:interceptors>
+	</int:channel>
 	
 	<int-ip:tcp-outbound-channel-adapter
 		id="outboundAdapter"
@@ -103,19 +108,25 @@
 		channel="outboundAdapterChannel" />
 	
 	
-	<!-- Wire Tap -->
+	<!-- Log -->
 	
-	<int:wire-tap channel="wiretapChannel" />
-				
-	<int:service-activator input-channel="wiretapChannel">
+	<int:channel id="logChannel" />
+	
+	<int:service-activator id="logActivator" input-channel="logChannel">
 		<bean class="com.example.springintegration.server.activator.LogActivator" />
 	</int:service-activator>
 
 	
   	<!-- Error -->
   	
-   	<int:transformer input-channel="errorChannel" method="handleError">
+  	<int:channel id="errorChannel">
+  		<int:interceptors>
+  			<int:wire-tap channel="logChannel" />
+  		</int:interceptors>
+  	</int:channel>
+  	
+   	<int:service-activator id="errorActivator" input-channel="errorChannel" output-channel="outboundChannel">
     	<bean class="com.example.springintegration.server.error.ErrorHandler" />    
-    </int:transformer>
+    </int:service-activator>
   	
 </beans>
