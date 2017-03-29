@@ -56,6 +56,11 @@
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-ftp</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-jdbc</artifactId>
+		</dependency>
+
 
 		<!-- Logging -->
 		<dependency>
@@ -93,12 +98,12 @@
 			<groupId>org.yaml</groupId>
 			<artifactId>snakeyaml</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>
@@ -109,7 +114,6 @@
 			<artifactId>mybatis-spring</artifactId>
 			<version>${org.mybatis.mybatis-spring-version}</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>

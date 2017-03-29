@@ -4,6 +4,11 @@
 
 <mapper namespace="com.example.springintegration.server.persistence.UserMapper">
 	
+	<select id="selectUser" resultType="User">
+		SELECT * FROM USER
+		WHERE id = #{id}
+	</select>
+	
 	<insert id="insertUser" keyProperty="id" useGeneratedKeys="true">
 		INSERT INTO USER (
 			username,
