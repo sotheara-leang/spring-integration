@@ -9,7 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:sample/datatype-channel.xml")
+@ContextConfiguration(locations = "classpath:datatype-channel.xml")
 public class TestDatatypeChannel {
 
 	@Autowired

@@ -10,7 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:sample/event-driven-consumer.xml")
+@ContextConfiguration(locations = "classpath:event-driven-consumer.xml")
 public class TestEventDrivenComsumer {
 	
 	@Autowired
