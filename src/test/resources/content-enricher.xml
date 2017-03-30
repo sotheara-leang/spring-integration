@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.3.xsd">
+
+
+	<int:channel id="headerEnricherChannel" />
+
+	<int:header-enricher input-channel="headerEnricherChannel" output-channel="nullChannel">
+		<int:header name="foo" value="123" />
+		<int:header name="bar" value="someBean" />
+		<int:correlation-id value="123" />
+	</int:header-enricher>
+	
+	
+	<int:channel id="enricherChannel" />
+	
+	<int:enricher input-channel="enricherChannel" output-channel="nullChannel">
+		<int:property name="lastName" value="Ty" />
+		<int:property name="firstName" value="Davuth" />
+		<int:header name="myHeader" value="newHeader" />
+	</int:enricher>
+	
+</beans>
