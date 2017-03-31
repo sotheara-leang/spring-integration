@@ -1,7 +1,12 @@
 # spring-integration
 
+#### 1. Description
 
-#### 1. Server
+This project contains examples:
+- TCP Client/Server + SSL/TLS (ISO8583)
+- Spring integration components
+
+#### 2. Server
 
 - Generate keystore
 
@@ -19,7 +24,7 @@
  
     keytool -list -v -alias server-key -keystore server-keystore.jks
     
-#### 2. Client
+#### 3. Client
 
 - Generate keystore
 
@@ -33,10 +38,10 @@
 
     keytool -import -alias server-key -file server-certificate.cer -keystore client-truststore.jks
 
-#### 3. VM Parameter
+#### 4. VM Parameter
 
 - Debug SSL Handshake: -Djavax.net.debug=ssl:handshake
 
-#### 4. References
+#### 5. References
 
 - [Spring Integration Sample](https://github.com/spring-projects/spring-integration-samples)
