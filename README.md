@@ -1,8 +1,7 @@
 # spring-integration
 
-#### 1. Description
+#### 1. Example
 
-This project contains examples:
 - TCP Client/Server + SSL/TLS (ISO8583)
 - Spring integration components
 
