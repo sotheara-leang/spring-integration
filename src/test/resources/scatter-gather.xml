@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.3.xsd">
+
+	<int:channel id="directChannel" />
+
+	<int:scatter-gather input-channel="directChannel"
+		output-channel="stdoutChannel" scatter-channel="scatterChannel"
+		gather-channel="gatherChannel" gather-timeout="2000" requires-reply="true">
+
+		<int:gatherer release-strategy-expression="size() == 2" method="sum">
+			<bean class="com.example.springintegration.sample.scattergather.GatherHandler" />		
+		</int:gatherer>
+	</int:scatter-gather>
+
+	<int:publish-subscribe-channel id="scatterChannel"
+		apply-sequence="true" />
+
+	<int:service-activator input-channel="scatterChannel"
+		output-channel="gatherChannel">
+		<bean class="com.example.springintegration.sample.scattergather.Consumer1" />
+	</int:service-activator>
+
+	<int:service-activator input-channel="scatterChannel"
+		output-channel="gatherChannel">
+		<bean class="com.example.springintegration.sample.scattergather.Consumer2" />
+	</int:service-activator>
+
+	<int:channel id="gatherChannel" />
+
+	<int:channel id="stdoutChannel" />
+
+	<int-stream:stdout-channel-adapter
+		channel="stdoutChannel" append-newline="true" />
+</beans>
