@@ -4,13 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
 
-public class Comsumer2 {
+public class Consumer1 {
 
-	private static Logger logger = LoggerFactory.getLogger(Comsumer2.class);
+	private static Logger logger = LoggerFactory.getLogger(Consumer1.class);
 	
 	public String consumer(Message<String> message) {
-		logger.debug("Comsumer2 get message => {}", message);
+		logger.debug("Consumer1 get message => {}", message);
 		
-		return "Consumer 2 message";
+		return "Consumer 1 message";
 	}
 }

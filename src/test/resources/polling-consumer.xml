@@ -7,12 +7,15 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.3.xsd">
 	
-	<int:channel id="directChannel" />
 	
-	<int:bridge input-channel="directChannel" output-channel="pubsubChannel" />
-	
-	<int:publish-subscribe-channel id="pubsubChannel" />
-	
-	<int-stream:stdout-channel-adapter channel="pubsubChannel" append-newline="true" />
-	
+	<int:channel id="queueChannel">
+		<int:queue />
+	</int:channel>
+
+	<int:service-activator input-channel="queueChannel" output-channel="nullChannel" ref="pollingConsumer">
+		<int:poller fixed-rate="3000" max-messages-per-poll="1" />
+	</int:service-activator>
+
+	<bean id="pollingConsumer" class="com.example.springintegration.sample.pollingconsumer.Consumer" />
+		
 </beans>
