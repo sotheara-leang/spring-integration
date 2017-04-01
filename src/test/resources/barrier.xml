@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.3.xsd">
+
+	<int:publish-subscribe-channel id="pubsubChannel"
+		apply-sequence="true" />
+
+	<int:barrier id="barrier" input-channel="pubsubChannel"
+		output-channel="transformChannel" timeout="5000" order="2" />
+
+	<int:transformer input-channel="transformChannel"
+		output-channel="stdoutChannel" expression="payload[1]" />
+
+	<int:delayer id="delayer" order="1" input-channel="pubsubChannel"
+		default-delay="2000" output-channel="releaseChannel" />
+
+	<int:channel id="releaseChannel" />
+
+	<int:outbound-channel-adapter channel="releaseChannel"
+		ref="barrier.handler" method="trigger" />
+
+	<int:channel id="stdoutChannel" />
+
+	<int-stream:stdout-channel-adapter
+		channel="stdoutChannel" append-newline="true" />
+
+</beans>

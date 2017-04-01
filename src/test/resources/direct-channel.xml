@@ -7,7 +7,7 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-4.3.xsd">
 	
-	<int:channel id="directChannel" datatype="java.lang.Number" />
+	<int:channel id="directChannel" />
 
 	<int-stream:stdout-channel-adapter channel="directChannel" append-newline="true" />
 	
