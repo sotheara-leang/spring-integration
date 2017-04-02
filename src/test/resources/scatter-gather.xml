@@ -12,7 +12,7 @@
 		output-channel="stdoutChannel" scatter-channel="scatterChannel"
 		gather-channel="gatherChannel" gather-timeout="2000" requires-reply="true">
 
-		<int:gatherer release-strategy-expression="size() == 2" method="sum">
+		<int:gatherer method="sum">
 			<bean class="com.example.springintegration.sample.scattergather.GatherHandler" />		
 		</int:gatherer>
 	</int:scatter-gather>
