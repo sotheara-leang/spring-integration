@@ -25,7 +25,7 @@ public class ClientBootstrap {
 		
 		ClientTcpGateway clientTcpGateway = appContext.getBean(ClientTcpGateway.class);
 		
-		IsoMessage message = messageFactory.newMessage(0x300);
+		IsoMessage message = messageFactory.newMessage(0x200);
 		
 		IsoMessage response = clientTcpGateway.send(message).get();
 		
